@@ -21,3 +21,10 @@ function getValues(file) {
       values.push(file);
     }
 }
+
+//定义首字母大写公共函数
+function pubUpperCase(index, arrayList) {
+    //先转小写和清除空白
+    var str = arrayList[index].toLowerCase().replace(/\si\s/g, ' ');
+    arrayList[index] = str.charAt(0).toUpperCase() + str.slice(1);
+}
