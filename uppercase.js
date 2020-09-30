@@ -9,7 +9,7 @@ const lgFile = {
 };
 var values = [];
 //专有名词数组
-var whiteWordsList = ["API","I'm","HTTP","COAP"];
+var whiteWordsGrop = ["API","I'm","HTTP","COAP"];
 
 //遍历对象，获取所有数据并传至新数组中
 function getValues(file) {
@@ -30,8 +30,7 @@ function pubUpperCase(index, arrayList) {
 }
 
 //定义句子首字母大写，包括句号和问号后的首字母的函数
-async function sentenceCase(file, array){
-    await getValues(file);
+async function sentenceCase(array){
     //以指定的方式为分隔符对字符串进行分割
     for (i = 0; i < array.length; i++){
         //先执行匹配.和?和！
@@ -50,3 +49,16 @@ async function sentenceCase(file, array){
 
     }
 }
+
+//恢复白名单大写
+async function whiteList(file, whiteWords){
+    await getValues(file);
+    sentenceCase(values);
+    for (i = 0; i < array.length; i++){
+        for (x = 0; x < whiteWords.length; x++){
+            var whiteWordsRegex = '/' + whiteWords[x] + '/ig'
+            values[i] = values[i].replace(eval(whiteWordsRegex), whiteWords[x])
+        }
+    }
+}
+whiteList(lgFile, whiteWordsGrop)
