@@ -28,3 +28,25 @@ function pubUpperCase(index, arrayList) {
     var str = arrayList[index].toLowerCase().replace(/\si\s/g, ' ');
     arrayList[index] = str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+//定义句子首字母大写，包括句号和问号后的首字母的函数
+async function sentenceCase(file, array){
+    await getValues(file);
+    //以指定的方式为分隔符对字符串进行分割
+    for (i = 0; i < array.length; i++){
+        //先执行匹配.和?和！
+        if(array[i].match(/(.+?[\.\?\!](\s|$))/g)){
+            //如果匹配到就执行分段
+            array[i] = array[i].split(/(.+?[\.\?\!](\s|$))/g);
+            for(y = 0; y < array[i].length; y++){
+                pubUpperCase(y, array[i]);
+            }
+            //重新拼合成句子
+            array[i] = array[i].join('').replace(/\s\s/g, ' ');
+        } else {
+             //没有匹配到就只需要执行首字母大写
+            pubUpperCase(i, array);
+        }
+
+    }
+}
