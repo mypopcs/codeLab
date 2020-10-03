@@ -54,7 +54,7 @@ async function sentenceCase(array){
 async function whiteList(file, whiteWords){
     await getValues(file);
     sentenceCase(values);
-    for (i = 0; i < array.length; i++){
+    for (i = 0; i < values.length; i++){
         for (x = 0; x < whiteWords.length; x++){
             var whiteWordsRegex = '/' + whiteWords[x] + '/ig'
             values[i] = values[i].replace(eval(whiteWordsRegex), whiteWords[x])
