@@ -1,0 +1,7 @@
+{
+    "title": {
+        "h1": "this is a title",
+        "content": "hello, i'm a demo page. if you see my api words uppercase. it's working!"
+    },
+    "h2": "this is h2, it's for test coap"
+}
