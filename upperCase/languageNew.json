@@ -3,5 +3,5 @@
         "h1": "This is a title",
         "content": "Hello, I'm a demo page. If you see my API words uppercase. It's working!"
     },
-    "h2": "This is h2, it's for test COAP"
+    "h2": "This is h2, it's for test CoAp"
 }

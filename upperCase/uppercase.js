@@ -1,6 +1,8 @@
 const fs = require('fs');
+
 //专有名词数组
-var whiteWordsGrop = ["API","I'm","HTTP","COAP"];
+var settings = JSON.parse(fs.readFileSync('whiteWords.json', 'utf8'))
+var whiteWordsGrop = settings.whiteWords
 
 //定义首字母大写公共函数
 function pubUpperCase(z){
@@ -24,14 +26,14 @@ function whiteList(s, whiteWordsList){
         for(i = 0; i < s.length; i++){
             for (x = 0; x < whiteWordsList.length; x++){
                 //根据白名单生成正则
-                var whiteWordsRule = '/\b' + whiteWordsList[x] + '\b/ig'
+                var whiteWordsRule = '/\\b' + whiteWordsList[x] + '\\b/ig'
                 //eval可以计算某个字符串并执行其中的js代码，比如用来执行正则替换
                 s[i] = s[i].replace(eval(whiteWordsRule), whiteWordsList[x])
             }
         }
     } else {
         for (x = 0; x < whiteWordsList.length; x++){
-            var whiteWordsRule = '/\b' + whiteWordsList[x] + '\b/ig'
+            var whiteWordsRule = '/\\b' + whiteWordsList[x] + '\\b/ig'
             s = s.replace(eval(whiteWordsRule), whiteWordsList[x])
           }
     }
@@ -66,7 +68,10 @@ function getValues(file) {
 }
 
 //读取文件
-fs.readFile('./language.json', async function(err, data){
+var fileName = '../upperCase/' + 'language';
+var newFileName = fileName + 'New'
+var fileType = '.json'
+fs.readFile(fileName + fileType, async function(err, data){
     if (err) {
         return console.log(err);
     } else {
@@ -76,7 +81,7 @@ fs.readFile('./language.json', async function(err, data){
         var objResult = await getValues(languagesFile)
         //将 JavaScript 值转换为 JSON 字符串,格式化
         var objResultToStr = JSON.stringify(objResult, null, 4)
-        fs.writeFile('./languageNew.json', objResultToStr, function(err){
+        fs.writeFile(newFileName + fileType, objResultToStr, function(err){
             if(err){
                 return console.log(err);
             } else {
