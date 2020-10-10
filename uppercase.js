@@ -24,14 +24,14 @@ function whiteList(s, whiteWordsList){
         for(i = 0; i < s.length; i++){
             for (x = 0; x < whiteWordsList.length; x++){
                 //根据白名单生成正则
-                var whiteWordsRule = '/' + whiteWordsList[x] + '/ig'
+                var whiteWordsRule = '/\b' + whiteWordsList[x] + '\b/ig'
                 //eval可以计算某个字符串并执行其中的js代码，比如用来执行正则替换
                 s[i] = s[i].replace(eval(whiteWordsRule), whiteWordsList[x])
             }
         }
     } else {
         for (x = 0; x < whiteWordsList.length; x++){
-            var whiteWordsRule = '/' + whiteWordsList[x] + '/ig'
+            var whiteWordsRule = '/\b' + whiteWordsList[x] + '\b/ig'
             s = s.replace(eval(whiteWordsRule), whiteWordsList[x])
           }
     }
