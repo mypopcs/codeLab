@@ -94,25 +94,42 @@ function getValues(file) {
 }
 
 //读取文件
-var fileName = '../upperCase/' + 'language';
-var newFileName = fileName + 'New'
-var fileType = '.json'
-fs.readFile(fileName + fileType, async function(err, data){
-    if (err) {
-        return console.log(err);
-    } else {
-        // console.log("读取文件数据：" + data)
-        //将 JSON 转为对象
-        var languagesFile = JSON.parse(data)
-        var objResult = await getValues(languagesFile)
-        //将 JavaScript 值转换为 JSON 字符串,格式化
-        var objResultToStr = JSON.stringify(objResult, null, 4)
-        fs.writeFile(newFileName + fileType, objResultToStr, function(err){
-            if(err){
-                return console.log(err);
-            } else {
-                console.log("数据写入成功！");
-            }
-        })
+function readFile(file, newPath){
+    console.log("开始读取" + file + '数据------------');
+    fs.readFile(file, async function(err, data){
+        if (err) {
+            return console.log(err);
+        } else {
+            // console.log("读取文件数据：" + data)
+            //将 JSON 转为对象
+            var languagesFile = JSON.parse(data)
+            var objResult = await getValues(languagesFile)
+            //将 JavaScript 值转换为 JSON 字符串,格式化
+            var objResultToStr = JSON.stringify(objResult, null, 4)
+            fs.writeFile(newPath, objResultToStr, function(err){
+                if(err){
+                    return console.log(err);
+                } else {
+                    console.log(file + ':' + "数据写入成功！");
+                }
+            })
+        }
+    })
+}
+
+var oldPath = './english/'
+var newPath = './newEnglish/'
+
+fs.readdir(oldPath, 'utf8', function(err, data) {
+    //删除第一个.DS_Store
+    // var dirStr = data.splice(0, 1);
+    for( d = 0; d < data.length; d++){
+        if(data[d] == '.DS_Store'){
+            data.splice(i,1);
+        }
+        var fileName = data[d]
+        var oldFilePath = oldPath + fileName
+        var newFilePath = newPath + fileName
+        readFile(oldFilePath, newFilePath)
     }
 })
