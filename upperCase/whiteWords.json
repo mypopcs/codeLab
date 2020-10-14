@@ -1,4 +1,3 @@
 {
-    "specilStrs": ["/", "-", ":"],
-    "whiteWords": ["API","I'm","HTTP","CoAp", "--Select--", "OMA/IPSO", "SB:ss", "-API"]
+    "whiteWords": ["API","I'm","HTTP","CoAp", "--Select--", "OMA/IPSO", "SB:ss", "API"]
 }

@@ -3,7 +3,6 @@ const fs = require('fs');
 //专有名词数组
 var settings = JSON.parse(fs.readFileSync('whiteWords.json', 'utf8'))
 var whiteWordsGrop = settings.whiteWords
-var specilStrs = settings.specilStrs
 
 //定义首字母大写公共函数
 function pubUpperCase(z){
@@ -20,45 +19,34 @@ function pubUpperCase(z){
     }
     return z
 }
-//白名单中包含特殊字符串
-function uploadWhiteWords(whiteWordsObj, specilRule){
-    for (s = 0; s < specilRule.length; s++){
-        var specilStr = '/[\\' + specilRule[s] + ']/g'
-        var specilRegex = eval(specilStr)
-        if(whiteWordsObj.match(specilRegex)){
-            whiteWordsObj = whiteWordsObj.replace(specilRegex, '\\' + specilRule[s])
-            return whiteWordsObj
-        }
-    }
-}
 //恢复白名单大写
 function whiteList(s, whiteWordsList){
-    //如果
+    //如果s是一个对象，就说明是多个句子组合，每个句子都执行匹配
     if(typeof s == 'object'){
         for(i = 0; i < s.length; i++){
-            for (x = 0; x < whiteWordsList.length; x++){
-                //判断白名单字符串中是否包含/ - :，如果包含执行白名单字符串排除
-                if (whiteWordsList[x].match(/[\/|\-|\:]/g)){
-                    var whiteWord = uploadWhiteWords(whiteWordsList[x], specilStrs)
-                } else {
-                    var whiteWord = whiteWordsList[x]
+            //将每句拆分为单个单词
+            var sWords = s[i].split(' ')
+            for( sw = 0; sw < sWords.length; sw++){
+                for (x = 0; x < whiteWordsList.length; x++){
+                    //单个单词做匹配
+                    if(sWords[sw].toLowerCase() == whiteWordsList[x].toLowerCase()){
+                        sWords[sw] = whiteWordsList[x]
+                    }
                 }
-                //根据白名单生成正则
-                var whiteWordsRule = '/\\b' + whiteWord + '\\b/ig'
-                //eval可以计算某个字符串并执行其中的js代码，比如用来执行正则替换
-                s[i] = s[i].replace(eval(whiteWordsRule), whiteWordsList[x])
+            }
+            s[i] = sWords.join(' ')
+        }
+        
+    } else {
+        var sWords = s.split(' ')
+        for (sw = 0; sw < sWords.length; sw++){
+            for (x = 0; x < whiteWordsList.length; x++){
+                if(sWords[sw].toLowerCase() == whiteWordsList[x].toLowerCase()){
+                    sWords[sw] = whiteWordsList[x]
+                }
             }
         }
-    } else {
-        for (x = 0; x < whiteWordsList.length; x++){
-            if (whiteWordsList[x].match(/[\/|\-|\:]/g)){
-                var whiteWord = uploadWhiteWords(whiteWordsList[x], specilStrs)
-            } else {
-                var whiteWord = whiteWordsList[x]
-            }
-            var whiteWordsRule = '/\\b' + whiteWord + '\\b/ig'
-            s = s.replace(eval(whiteWordsRule), whiteWordsList[x])
-          }
+        s = sWords.join(' ')
     }
     return s
 }
@@ -74,7 +62,7 @@ function getValues(file) {
             //满足. ? !就分割句子
             // \s匹配所有空白符，包括换行；.匹配除换行符之外任何单字符；+匹配前面的子表达式一次或多次；?匹配前面的子表达式零次或一次；$匹配输入字符串的结尾位置
             //()标记一个子表达式的开始和结束位置；[]标记一个中括号表达式的开始与结束
-            // \b 匹配一个单词边界，即字与空格间的位置
+            // \b 匹配一个单词边界，即字与空格间的位置；\d匹配数字
             if(objValues.match(/(.+?[\.\?\!](\s|$))/g)){
                 var splitList = file[values] = objValues.split(/(.+?[\.\?\!](\s|$))/g);
                 //执行大写
@@ -122,11 +110,12 @@ var newPath = './newEnglish/'
 
 fs.readdir(oldPath, 'utf8', function(err, data) {
     //删除第一个.DS_Store
-    // var dirStr = data.splice(0, 1);
     for( d = 0; d < data.length; d++){
         if(data[d] == '.DS_Store'){
-            data.splice(i,1);
+            //splice() 方法可删除从 index 处开始的零个或多个元素(第二个值)，并且用参数列表中声明的一个或多个值来替换那些被删除的元素。
+            data.splice(d,1);
         }
+        console.log('读取到列表：' + data)
         var fileName = data[d]
         var oldFilePath = oldPath + fileName
         var newFilePath = newPath + fileName
