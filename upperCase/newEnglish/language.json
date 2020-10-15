@@ -1,8 +1,8 @@
 {
     "title": {
         "h1": "This is a title",
-        "content": "Hello, I'm a demo page. If you see my API words uppercase. It's working!"
+        "content": "Hello, I'm a demo page. If you see my API words uppercase. It's working! Yes, it's my API. It's a {API} and (API). Hha, look API, and look(API)."
     },
     "h2": "This is h2, it's for test CoAp",
-    "testSpe": "--Select-- in OMA/IPSO  sh in SB:ss API"
+    "testSpe": "--select-- in OMA/IPSO  sh in SB:ss API"
 }

@@ -25,28 +25,36 @@ function whiteList(s, whiteWordsList){
     if(typeof s == 'object'){
         for(i = 0; i < s.length; i++){
             //将每句拆分为单个单词
-            var sWords = s[i].split(' ')
-            for( sw = 0; sw < sWords.length; sw++){
+            var oneWords = s[i].split(' ')
+            for( o = 0; o < oneWords.length; o++){
                 for (x = 0; x < whiteWordsList.length; x++){
-                    //单个单词做匹配
-                    if(sWords[sw].toLowerCase() == whiteWordsList[x].toLowerCase()){
-                        sWords[sw] = whiteWordsList[x]
+                    //单词在句子中匹配
+                    if(RegExp(whiteWordsList[x], 'ig').test(s[i]) == true){
+                        s[i] = s[i].replace(RegExp('\\b' + whiteWordsList[x] +'\\b', 'ig'), whiteWordsList[x])
+                    }
+                    //单个单词匹配
+                    if(whiteWordsList[x] == oneWords[o]) {
+                        oneWords[o] = whiteWordsList[x]
+                        s[i] = oneWords.join(' ')
                     }
                 }
             }
-            s[i] = sWords.join(' ')
         }
         
     } else {
-        var sWords = s.split(' ')
-        for (sw = 0; sw < sWords.length; sw++){
+        var oneWords = s.split(' ')
+        console.log(s)
+        for (o = 0; o < oneWords.length; o++){
             for (x = 0; x < whiteWordsList.length; x++){
-                if(sWords[sw].toLowerCase() == whiteWordsList[x].toLowerCase()){
-                    sWords[sw] = whiteWordsList[x]
+                if(RegExp(whiteWordsList[x], 'ig').test(s) == true){
+                    s = s.replace(RegExp('\\b' + whiteWordsList[x] +'\\b', 'ig'), whiteWordsList[x])
+                }
+                if(whiteWordsList[x] == oneWords[o]) {
+                    oneWords[o] = whiteWordsList[x]
+                    s = oneWords.join(' ')
                 }
             }
         }
-        s = sWords.join(' ')
     }
     return s
 }
@@ -62,7 +70,7 @@ function getValues(file) {
             //满足. ? !就分割句子
             // \s匹配所有空白符，包括换行；.匹配除换行符之外任何单字符；+匹配前面的子表达式一次或多次；?匹配前面的子表达式零次或一次；$匹配输入字符串的结尾位置
             //()标记一个子表达式的开始和结束位置；[]标记一个中括号表达式的开始与结束
-            // \b 匹配一个单词边界，即字与空格间的位置；\d匹配数字
+            // \b 匹配一个单词边界，即字与空格间的位置；\d匹配数字；/i忽略大小写
             if(objValues.match(/(.+?[\.\?\!](\s|$))/g)){
                 var splitList = file[values] = objValues.split(/(.+?[\.\?\!](\s|$))/g);
                 //执行大写
